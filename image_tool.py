@@ -60,6 +60,24 @@ class ImageTool:
         image.save(destination)
 
     @staticmethod
+    def adjust_color_balance(source, destination, red_factor, green_factor, blue_factor):
+        image = Image.open(source)
+
+        r, g, b = image.split()
+
+        r = r.point(lambda i: i * red_factor)
+        g = g.point(lambda i: i * green_factor)
+        b = b.point(lambda i: i * blue_factor)
+
+        image = Image.merge('RGB', (r, g, b))
+
+        destination_path = Path(destination)
+        if not destination_path.parent.exists():
+            destination_path.parent.mkdir(parents=True, exist_ok=True)
+
+        image.save(destination)
+
+    @staticmethod
     def get_source_path(message=None) -> str:
         source = get_user_info(message or "Type image path")
 

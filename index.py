@@ -1,3 +1,4 @@
+from adjust_color_balance import adjust_color_balance
 from helpers import *
 from image_color_converter import convert_image_color
 from image_converter import convert_image_format
@@ -9,7 +10,8 @@ def main_menu():
     print("1. Convert image format")
     print("2. Resize image")
     print("3. Change color")
-    print("4. Exit")
+    print("4. Adjust color balance")
+    print("5. Exit")
 
 
 def run_menu():
@@ -24,6 +26,8 @@ def run_menu():
         elif choice == "3":
             convert_image_color()
         elif choice == "4":
+            adjust_color_balance()
+        elif choice == "5":
             print("Exiting program...")
             break
 
