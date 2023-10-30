@@ -2,24 +2,25 @@ from pathlib import Path
 
 from PIL import Image
 
-from helpers import get_user_info
+from helpers import get_user_info, create_dir
 from image_format import ImageFormat
 
 
+# Class for grouping image manipulations
 class ImageTool:
 
+    # Just converting format
     @staticmethod
     def convert_format(source, destination):
         image = Image.open(source)
         if image.mode != 'RGB':
             image = image.convert('RGB')
 
-        destination_path = Path(destination)
-        if not destination_path.parent.exists():
-            destination_path.parent.mkdir(parents=True, exist_ok=True)
+        create_dir(destination)
 
         image.save(destination)
 
+    # Resizing image
     @staticmethod
     def resize_image(source, destination, width: int, height: int):
         image = Image.open(source)
@@ -32,12 +33,11 @@ class ImageTool:
 
         image = image.resize((int(width), int(height)))
 
-        destination_path = Path(destination)
-        if not destination_path.parent.exists():
-            destination_path.parent.mkdir(parents=True, exist_ok=True)
+        create_dir(destination)
 
         image.save(destination)
 
+    # Converting color in image
     @staticmethod
     def convert_color(source, destination, source_color: tuple, result_color: tuple):
         image = Image.open(source)
@@ -53,12 +53,11 @@ class ImageTool:
 
         image.putdata(new_data)
 
-        destination_path = Path(destination)
-        if not destination_path.parent.exists():
-            destination_path.parent.mkdir(parents=True, exist_ok=True)
+        create_dir(destination)
 
         image.save(destination)
 
+    # Adjusting color balance
     @staticmethod
     def adjust_color_balance(source, destination, red_factor, green_factor, blue_factor):
         image = Image.open(source)
@@ -71,28 +70,43 @@ class ImageTool:
 
         image = Image.merge('RGB', (r, g, b))
 
-        destination_path = Path(destination)
-        if not destination_path.parent.exists():
-            destination_path.parent.mkdir(parents=True, exist_ok=True)
+        create_dir(destination)
 
         image.save(destination)
 
+    # Get correct source image path
     @staticmethod
-    def get_source_path(message=None) -> str:
-        source = get_user_info(message or "Type image path")
+    def get_source_path(message=None, not_found_message=None) -> str:
 
-        if not Path(source).exists():
-            return ""
+        while True:
+            source = get_user_info(message or "Type image path")
+            path = Path(source)
+            if path.exists():
+                break
+
+            print(not_found_message or "Image not found")
 
         return source
 
+    # Get correct destination image path
     @staticmethod
-    def get_destination_path(message=None) -> str:
-        destination = get_user_info(message or
-                                    "Type image filename with extension")
+    def get_destination_path(message=None, ) -> str:
 
-        user_format = destination.split('.')[1]
-        if not ImageFormat.accepted_value(user_format):
-            raise ValueError("Typed image format is not supported")
+        while True:
+            try:
+                destination = get_user_info(message or
+                                            "Type image filename with extension")
+
+                user_format = destination.split('.')[1]
+                if not ImageFormat.accepted_value(user_format):
+                    raise ValueError("Typed image format is not supported")
+
+                break
+
+            except IndexError:
+                print("You typed wrong filename")
+
+            except ValueError as value_error:
+                print(value_error)
 
         return destination

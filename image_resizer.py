@@ -3,21 +3,8 @@ from image_tool import ImageTool
 
 
 def resize_image():
-    while True:
-        path = ImageTool.get_source_path()
-
-        if len(path) != 0:
-            break
-
-        print("Image not found")
-
-    while True:
-        destination = get_user_info("Type destination folder path")
-
-        if len(path) != 0:
-            break
-
-        print("Wrong path")
+    source_path = ImageTool.get_source_path()
+    destination_path = ImageTool.get_destination_path()
 
     while True:
         try:
@@ -28,4 +15,4 @@ def resize_image():
         except ValueError:
             print("You typped wrong value")
 
-    ImageTool.resize_image(path, destination, width, height)
+    ImageTool.resize_image(source_path, destination_path, width, height)

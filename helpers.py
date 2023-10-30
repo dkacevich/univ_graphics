@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 def get_user_info(message: str) -> str:
     return input(message + " ")
 
@@ -6,8 +9,10 @@ def check_yes_input(input: str) -> bool:
     return input.lower() in ["y", "yes"]
 
 
-def is_image_format_correct(input: str) -> bool:
-    return input.lower() in ["jpg", "jpeg", "png", "gif"]
+def create_dir(path: str):
+    path = Path(path)
+    if not path.parent.exists():
+        path.parent.mkdir(parents=True, exist_ok=True)
 
 
 def is_valid_rgb(color) -> bool:

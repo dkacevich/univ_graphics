@@ -8,13 +8,10 @@ def convert_image_format():
     do_loop = check_yes_input(is_multiple)
 
     def add_info_to_image_list(image_list: list):
+
         while True:
 
             source = ImageTool.get_source_path("Type image filename in current folder:")
-
-            if len(source) == 0:
-                print("This image not exists")
-                continue
 
             for info in image_list:
                 if info.get('source') == source:
@@ -27,17 +24,7 @@ def convert_image_format():
 
             break
 
-        while True:
-
-            try:
-                destination = ImageTool.get_destination_path()
-                break
-
-            except IndexError:
-                print("You typed wrong filename")
-
-            except ValueError as value_error:
-                print(value_error)
+        destination = ImageTool.get_destination_path()
 
         image_list.append({
             "source": source,

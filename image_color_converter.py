@@ -3,24 +3,8 @@ from image_tool import ImageTool
 
 
 def convert_image_color():
-    while True:
-        path = ImageTool.get_source_path()
-
-        if len(path) != 0:
-            break
-
-        print("Image not found")
-
-    while True:
-        try:
-            destination = ImageTool.get_destination_path()
-            break
-
-        except IndexError:
-            print("You typed wrong filename")
-
-        except ValueError as value_error:
-            print(value_error)
+    source_path = ImageTool.get_source_path()
+    destination_path = ImageTool.get_destination_path()
 
     while True:
         try:
@@ -34,4 +18,4 @@ def convert_image_color():
         except ValueError:
             print("You typped wrong value")
 
-    ImageTool.convert_color(path, destination, source_color, result_color)
+    ImageTool.convert_color(source_path, destination_path, source_color, result_color)
