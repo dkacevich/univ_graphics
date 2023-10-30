@@ -1,6 +1,7 @@
 def get_user_info(message: str) -> str:
     return input(message + " ")
 
+
 def check_yes_input(input: str) -> bool:
     return input.lower() in ["y", "yes"]
 

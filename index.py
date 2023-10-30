@@ -1,6 +1,6 @@
+from helpers import *
 from image_converter import convert_image_format
 from image_resizer import resize_image
-from helpers import *
 
 
 def main_menu():
@@ -14,7 +14,7 @@ def run_menu():
     while True:
         main_menu()
         choice = get_user_info("Enter your choice (1-3):")
-        
+
         if choice == "1":
             convert_image_format()
         elif choice == "2":
@@ -22,8 +22,7 @@ def run_menu():
         elif choice == "3":
             print("Exiting program...")
             break
-        
 
-    
+
 if __name__ == "__main__":
     run_menu()
