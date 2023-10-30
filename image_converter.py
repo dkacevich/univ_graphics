@@ -30,7 +30,7 @@ def convert_image_format():
         while True:
 
             try:
-                destination = ImageTool.get_destination_path("Type destination image filename with extension")
+                destination = ImageTool.get_destination_path()
                 break
 
             except IndexError:

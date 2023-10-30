@@ -30,7 +30,28 @@ class ImageTool:
         if height == 0:
             height = width / ratio
 
-        image = image.resize([int(width), int(height)])
+        image = image.resize((int(width), int(height)))
+
+        destination_path = Path(destination)
+        if not destination_path.parent.exists():
+            destination_path.parent.mkdir(parents=True, exist_ok=True)
+
+        image.save(destination)
+
+    @staticmethod
+    def convert_color(source, destination, source_color: tuple, result_color: tuple):
+        image = Image.open(source)
+        data = image.getdata()
+
+        new_data = []
+
+        for item in data:
+            if item[:3] == source_color:
+                new_data.append(result_color + item[3:])
+            else:
+                new_data.append(item)
+
+        image.putdata(new_data)
 
         destination_path = Path(destination)
         if not destination_path.parent.exists():
@@ -48,7 +69,7 @@ class ImageTool:
         return source
 
     @staticmethod
-    def get_destination_path(file_extention: bool, message=None) -> str:
+    def get_destination_path(message=None) -> str:
         destination = get_user_info(message or
                                     "Type image filename with extension")
 
