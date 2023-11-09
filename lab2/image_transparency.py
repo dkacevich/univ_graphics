@@ -19,4 +19,4 @@ def transparent_image():
 
 
 
-    ImageTool.resize_image(source_path, destination_path, width, height)
+    ImageTool.change_transparency(source_path, destination_path, transparancy)

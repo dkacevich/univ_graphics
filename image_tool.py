@@ -1,6 +1,7 @@
 from pathlib import Path
-
-from PIL import Image
+from math import *
+from PIL import Image, ImageEnhance
+from PIL.Image import Resampling
 
 from helpers import get_user_info, create_dir
 from image_format import ImageFormat
@@ -31,7 +32,7 @@ class ImageTool:
         if height == 0:
             height = width / ratio
 
-        image = image.resize((int(width), int(height)))
+        image = image.resize((int(width), int(height)), Resampling.BOX)
 
         create_dir(destination)
 
@@ -74,14 +75,105 @@ class ImageTool:
 
         image.save(destination)
 
+
+
+    # Change image transparency
+    @staticmethod
+    def change_transparency(source, destination, transparency):
+        image = Image.open(source)
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
+               
+                
+        image.putalpha(transparency)
+        
+        create_dir(destination)
+        
+        image.save(destination, 'PNG')
+
+
+
+    # Split image into parts
+    # Currenty only divide width
+    @staticmethod
+    def split_to_parts(source, destination, parts):
+        image = Image.open(source)
+        format = image.format
+
+        width, height = image.size
+        part_width = width // parts
+        images = []
+
+        for i in range(parts):
+            images.append(
+                image.crop((i*part_width, 0, (i+1)*part_width, height))
+            )      
+
+        #TODO Cropping by width & height at same time
+        # part_height = height // parts
+
+        create_dir(destination)
+        
+        for i, image in enumerate(images):
+            image.save(f"{destination}/part_{i}.{format}")
+            
+
+
+    # Remove area from image
+    @staticmethod
+    def remove_area(source, destination, area):
+        image = Image.open(source).convert("RGBA")
+        
+        image.paste(Image.new('RGBA', (area[2]-area[0], area[3]-area[1])), area)
+
+        create_dir(destination)
+        
+        image.save(destination, "PNG")
+    
+        
+    # Remove outside area from image
+    @staticmethod
+    def remove_area_outside(source, destination, area):
+        image = Image.open(source).convert("RGBA")
+
+        try: 
+            mask = Image.new('L', image.size, color='black')
+            mask.paste(Image.new('L', area[2:], color='white'), area[:2])
+            image.putalpha(mask)
+
+
+            create_dir(destination)
+            
+            image.save(destination, "PNG")        
+        except ValueError:
+            print("Something goes wrong")
+       
+       
+    # Change contract in image
+    @staticmethod
+    def change_contrast(source, destination, factor):
+        image = Image.open(source)
+
+        # Use Enhancer
+        enhancer = ImageEnhance.Contrast(image)
+        enhanced_image = enhancer.enhance(factor)
+
+        create_dir(destination)
+        
+        enhanced_image.save(destination)
+            
+     
+
+
+
     # Get correct source image path
     @staticmethod
     def get_source_path(message=None, not_found_message=None) -> str:
 
         while True:
-            source = get_user_info(message or "Type image path")
+            source = get_user_info(message or "Type image path:")
             path = Path(source)
-            if path.exists():
+            if path.exists() and path.is_file():
                 break
 
             print(not_found_message or "Image not found")
@@ -95,7 +187,7 @@ class ImageTool:
         while True:
             try:
                 destination = get_user_info(message or
-                                            "Type image filename with extension")
+                                            "Type image filename with extension:")
 
                 user_format = destination.split('.')[1]
                 if not ImageFormat.accepted_value(user_format):
@@ -110,3 +202,4 @@ class ImageTool:
                 print(value_error)
 
         return destination
+
