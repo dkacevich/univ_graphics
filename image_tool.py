@@ -175,11 +175,11 @@ class ImageTool:
         image = Image.open(source).convert("RGBA")
 
         font = ImageFont.truetype("lab3/Arial.ttf", font_size)
-        text_image = Image.new('RGBA', image.size, (255, 255, 255, 0))
+        text_image = Image.new('RGBA', tuple(x * 2 for x in image.size), (255, 255, 255, 0))
         draw = ImageDraw.Draw(text_image)
         draw.text(position, watermark_text, fill=color + (int(255 * opacity),), font=font)
 
-        rotated_text_image = text_image.rotate(rotate_angle, expand=True)
+        rotated_text_image = text_image.rotate(rotate_angle)
 
         watermark_layer = Image.new("RGBA", image.size)
 

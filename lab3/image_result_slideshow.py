@@ -8,16 +8,20 @@ import time
 
 import time
 
-import psutil
-from helpers import get_user_info
 from image_tool import ImageTool
 
 
 def result_slideshow():
     
     paths = ImageTool.result
+    
+    if len(paths) <= 0:
+        print("\n")
+        print("Results are empty")
+        print("\n")
+        return
+    
     delay = 2000
-
 
     root = tk.Tk()
     root.title('Slideshow App')
@@ -66,7 +70,6 @@ class SlideshowApp:
     def update_image(self):
         if self.slideshow_running:
             self.current_image = Image.open(self.image_paths[self.image_index])
-            self.current_image = self.current_image.resize((500, 500))
             self.photo = ImageTk.PhotoImage(self.current_image)
             self.image_label.config(image=self.photo)
             self.image_index = (self.image_index + 1) % len(self.image_paths)

@@ -1,3 +1,5 @@
+import math
+import random
 from helpers import get_user_info, is_valid_rgb
 from image_tool import ImageTool
 
@@ -15,7 +17,7 @@ def add_watermark():
             opacity = float(get_user_info("Type watermark text opacity:"))
             font_size = int(get_user_info("Type watermark text font size:"))
             rotate_angle = float(get_user_info("Type watermark text rotate angle:"))
-            color = tuple(map(int, get_user_info("Type RGB text color):").split()))
+            color = tuple(map(int, get_user_info("Type RGB text color:").split()))
 
             if not is_valid_rgb(color):
                 raise ValueError("Wrong color name")
@@ -26,6 +28,7 @@ def add_watermark():
             print(error)
 
 
+   
     ImageTool.add_watermark(
         source_path,
         destination_path,
