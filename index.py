@@ -8,6 +8,9 @@ from lab1.adjust_color_balance import adjust_color_balance
 from lab1.image_color_converter import convert_image_color
 from lab1.image_converter import convert_image_format
 from lab1.image_resizer import resize_image
+from lab3.image_merge import image_merge
+from lab3.image_result_slideshow import result_slideshow
+from lab3.image_watermark import add_watermark
 
 
 def main_menu():
@@ -28,6 +31,13 @@ def main_menu():
     print("7. Remove image area")
     print("8. Remove image outside area")
     print("9. Increase image contrast")
+    
+    print("\n")
+    print("Lab 3:")
+    print("10. Merge 2 images")
+    print("11. Add watermark to image")
+    print("12. Run result slideshow")
+    
     
     
     
@@ -64,6 +74,18 @@ def run_menu():
             
         elif choice == "9":
             change_contrast()
+        
+        
+        # Lab 3
+        elif choice == "10":
+            image_merge()
+            
+        elif choice == "11":
+            add_watermark()
+            
+        elif choice == "12":
+            result_slideshow()
+            
         
         
         elif choice == "100":
